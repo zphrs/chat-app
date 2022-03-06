@@ -112,8 +112,9 @@ export default class ChatDB {
       if (!this.user) {
         reject("Not logged in")
       }
+      const url = new URL(this.url, this.url)
       const ws = new WebSocket(
-        (location.protocol === "https:" ? "wss://" : "ws://") +
+        (url.protocol === "https:" ? "wss://" : "ws://") +
           new URL(this.url).host +
           "/ws/user?userId=" +
           this.user.id +
@@ -144,7 +145,7 @@ export default class ChatDB {
       if (!this.user) {
         throw new Error("No user logged in")
       }
-      const url = new URL(this.url)
+      const url = new URL(this.url, this.url)
       const ws = new WebSocket(
         (url.protocol === "https:" ? "wss://" : "ws://") +
           url.host +
