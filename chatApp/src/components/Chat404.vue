@@ -13,20 +13,6 @@ const { db, user } = toRefs(props)
 const router = useRouter()
 const route = useRoute()
 
-async function deleteAccount() {
-  await db.value.deleteAccount()
-  localStorage.removeItem('user')
-  localStorage.removeItem('token')
-  router.push('/')
-}
-
-async function createUser(name) {
-  console.log('clicked')
-  await db.value.createUser(name)
-  localStorage.setItem('user', user.value.id)
-  localStorage.setItem('token', user.value.secretId)
-}
-
 async function createChat(id) {
   try {
     await db.value.createChat(id)

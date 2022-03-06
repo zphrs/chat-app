@@ -43,8 +43,9 @@ async function createUser(name) {
     }, 0)
     return
   }
-  localStorage.setItem('user', user.value.id)
-  localStorage.setItem('token', user.value.secretId)
+  localStorage.setItem('user', user.id)
+  localStorage.setItem('token', user.secretId)
+  console.log(localStorage.getItem('user'))
   if (route.query.redirect) {
     router.push(route.query.redirect)
   }
