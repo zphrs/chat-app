@@ -144,9 +144,10 @@ export default class ChatDB {
       if (!this.user) {
         throw new Error("No user logged in")
       }
+      const url = new URL(this.url)
       const ws = new WebSocket(
-        (location.protocol === "https:" ? "wss://" : "ws://") +
-          new URL(this.url).host +
+        (url.protocol === "https:" ? "wss://" : "ws://") +
+          url.host +
           "/ws/chat?userId=" +
           this.user.id +
           "&secret=" +
