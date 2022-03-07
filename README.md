@@ -5,7 +5,7 @@
 check it out at [https://zchats.glitch.me](https://zchats.glitch.me)
 
 ## Run it
-
+> Make sure to run npm install in the root directory!
 ### To run the front end locally:
 
 1. cd into chatApp
