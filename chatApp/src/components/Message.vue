@@ -25,14 +25,13 @@ defineProps({
   display: block;
   width: fit-content;
   max-width: 80%;
-  align-self: start;
 }
 
 .me {
   background-color: #2c3e50;
   border-radius: 5px 5px 0px 5px;
   color: #fff;
-  align-self: end;
+  margin-left: auto;
 }
 
 .parent {
