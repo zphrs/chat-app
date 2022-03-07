@@ -2,7 +2,7 @@
 import ChatDB from './db/ChatDB'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
-const db = new ChatDB('https://zchats.glitch.me/')
+const db = new ChatDB('https://zchats.glitch.me')
 const user = ref(db.user)
 const route = useRoute()
 const router = useRouter()
