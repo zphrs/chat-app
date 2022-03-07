@@ -3,7 +3,7 @@ import WebSocket, { WebSocketServer } from "ws"
 const app = express()
 const wsServer = new WebSocketServer({ noServer: true })
 const wsUserServer = new WebSocketServer({ noServer: true })
-const port = 5500
+const port = process.env.PORT || 5500
 const whitelist = ["http://localhost:3000", "http://localhost:5500"]
 
 import ChatDatabase from "../dist/ChatDatabase/ChatDatabase.js"
