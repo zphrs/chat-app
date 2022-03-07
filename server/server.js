@@ -4,7 +4,11 @@ const app = express()
 const wsServer = new WebSocketServer({ noServer: true })
 const wsUserServer = new WebSocketServer({ noServer: true })
 const port = process.env.PORT || 5500
-const whitelist = ["http://localhost:3000", "http://localhost:5500"]
+const whitelist = [
+  "http://localhost:3000",
+  "http://localhost:5500",
+  "https://zchats.glitch.me",
+]
 
 import ChatDatabase from "../dist/ChatDatabase/ChatDatabase.js"
 
