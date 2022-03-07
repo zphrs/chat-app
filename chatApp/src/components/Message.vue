@@ -24,6 +24,7 @@ defineProps({
   text-align: left;
   display: block;
   width: fit-content;
+  max-width: 80%;
   align-self: start;
 }
 
