@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { onBeforeUnmount, ref, toRefs, computed, onMounted } from 'vue'
+import { onBeforeUnmount, ref, toRefs, computed } from 'vue'
 import TextForm from './TextForm.vue'
 import Message from './Message.vue'
 import ChatDB from '../db/ChatDB'
@@ -99,10 +99,9 @@ function scrollToBottom() {
   })
 }
 
-onMounted(() => {
+function addScrollListenerToMessagesDiv() {
   let fetching = false
-  console.log('mounted')
-  messagesDiv.value.addEventListener('scroll', async () => {
+  const onScroll = async () => {
     // check if scroll is at top
     if (messagesDiv.value.scrollTop === 0) {
       if (fetching) {
@@ -126,8 +125,9 @@ onMounted(() => {
         behavior: 'smooth',
       })
     }
-  })
-})
+  }
+  messagesDiv.value.addEventListener('scroll', onScroll)
+}
 
 function promote(id) {
   db.value.promote(ws.value, id)
@@ -149,7 +149,12 @@ function promote(id) {
       class="messages"
       ref="messagesDiv"
       v-if="!showUserModal"
-      @vnodeMounted="scrollToBottom"
+      @vnodeMounted="
+        () => {
+          scrollToBottom()
+          addScrollListenerToMessagesDiv()
+        }
+      "
     >
       <Message
         v-for="message in messages"
