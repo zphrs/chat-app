@@ -62,9 +62,16 @@ class Chat extends Database_1.Database {
         return messageIds.map((id) => this.getChild(id));
     }
     getTopMessages(limit = 50, offset = 0) {
-        const messageIds = this.data.messageIds.slice(this.data.messageIds.length - offset - limit < 0
-            ? 0
-            : this.data.messageIds.length - offset - limit, this.data.messageIds.length - offset);
+        console.log(this.data.messageIds.length);
+        console.log(offset);
+        const start = this.data.messageIds.length - offset - limit;
+        const end = this.data.messageIds.length - offset;
+        if (start < 0) {
+            return this.data.messageIds
+                .slice(0, end)
+                .map((id) => this.getChild(id));
+        }
+        const messageIds = this.data.messageIds.slice(start, end);
         return messageIds.map((id) => this.getChild(id));
     }
     getMessage(id) {

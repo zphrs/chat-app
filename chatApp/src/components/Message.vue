@@ -18,7 +18,7 @@ defineProps({
 <style scoped>
 .message {
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 5px 5px 5px 0px;
   background-color: #f5f5f5;
   margin-bottom: 10px;
   text-align: left;
@@ -29,6 +29,7 @@ defineProps({
 
 .me {
   background-color: #2c3e50;
+  border-radius: 5px 5px 0px 5px;
   color: #fff;
   align-self: end;
 }

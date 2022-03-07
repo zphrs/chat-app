@@ -195,6 +195,29 @@ export default class ChatDB {
     ws.send(JSON.stringify({ type: "promote", userId }))
   }
 
+  async getMoreMessages(ws, length) {
+    ws.send(
+      JSON.stringify({
+        type: "more",
+        start: length,
+        count: 10,
+      })
+    )
+    return new Promise((resolve, reject) => {
+      ws.addEventListener("message", async event => {
+        const data = JSON.parse(event.data)
+        if (data.type === "more") {
+          let out = await Promise.all(
+            data.messages.map(m => {
+              return this.addUsernameToMessage(m)
+            })
+          )
+          resolve(out)
+        }
+      })
+    })
+  }
+
   async createChat(id) {
     try {
       await post(this.url + "/add-chat", { users: [], id }, this.user)

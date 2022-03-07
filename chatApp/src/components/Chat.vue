@@ -1,10 +1,11 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'
-import { onBeforeUnmount, ref, toRefs, computed } from 'vue'
+import { onBeforeUnmount, ref, toRefs, computed, onMounted } from 'vue'
 import TextForm from './TextForm.vue'
 import Message from './Message.vue'
 import ChatDB from '../db/ChatDB'
 import ApprovePeople from './ApprovePeople.vue'
+import Loading from './Loading.vue'
 const props = defineProps({
   db: ChatDB,
   user: Object,
@@ -23,6 +24,7 @@ const chatMetadata = ref({})
 const messagesDiv = ref(null)
 const showUserModal = ref(false)
 const ws = ref(null)
+const loading = ref(true)
 
 let subbedToChat = false
 
@@ -70,6 +72,7 @@ async function subToChat() {
     console.log('HERE')
     router.push(route.path.replace(/\/+$/, '') + '/404')
   }
+  loading.value = false
 }
 
 if (user.value) {
@@ -96,6 +99,36 @@ function scrollToBottom() {
   })
 }
 
+onMounted(() => {
+  let fetching = false
+  console.log('mounted')
+  messagesDiv.value.addEventListener('scroll', async () => {
+    // check if scroll is at top
+    if (messagesDiv.value.scrollTop === 0) {
+      if (fetching) {
+        return
+      }
+      messagesDiv.value.scrollTop = 1
+      messagesDiv.value.style.overflowY = 'hidden'
+      loading.value = true
+      fetching = true
+      // if so, load more messages
+      const out = await db.value.getMoreMessages(
+        ws.value,
+        messages.value.length
+      )
+      console.log(messages.value.length)
+      messagesDiv.value.style.overflowY = 'auto'
+      messages.value = [...out, ...messages.value]
+      fetching = false
+      loading.value = false
+      messagesDiv.value.scrollTo(0, 1, {
+        behavior: 'smooth',
+      })
+    }
+  })
+})
+
 function promote(id) {
   db.value.promote(ws.value, id)
 }
@@ -109,6 +142,9 @@ function promote(id) {
         {{ showUserModal ? 'Hide' : 'Show Viewers' }}
       </button>
     </div>
+    <transition name="fade">
+      <Loading v-if="loading" />
+    </transition>
     <div
       class="messages"
       ref="messagesDiv"
@@ -157,6 +193,8 @@ function promote(id) {
     width: 0;
   }
   scroll-behavior: smooth;
+  position: relative;
+  padding: 0.5rem;
 }
 .chat-parent {
   display: flex;
@@ -166,7 +204,6 @@ function promote(id) {
   left: 0;
   height: 100%;
   width: 100%;
-  padding: 0.5rem;
   box-sizing: border-box;
   justify-content: flex-start;
   .send {
@@ -178,6 +215,21 @@ function promote(id) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  box-shadow: 0 4px 0.5rem -4px rgb(44, 62, 80, 0.2);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity ease-out 1s;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade {
+  opacity: 1;
+}
+a {
+  padding: 10px;
 }
 </style>
