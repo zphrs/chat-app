@@ -364,19 +364,15 @@ wsServer.on("connection", (ws, req, user) => {
           chat.addUser(db.getUser(data.userId))
         }
         break
-      case "getTopMessages":
-        const messages = chat.getTopMessages(data.count, data.start)
-        const out = messages.map(message => {
-          return message.data
-        })
+      case "more":
         ws.send(
           JSON.stringify({
-            type: "topMessages",
-            messages: out,
-            nextStart: data.start + data.count,
+            type: "more",
+            messages: chat
+              .getTopMessages(data.count, data.start)
+              .map(message => message.data),
           })
         )
-        break
     }
   })
   ws.onclose = () => {
