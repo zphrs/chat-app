@@ -30,6 +30,8 @@ router.beforeEach(async (to, from) => {
   if (to.path === '/login') {
     try {
       await db.setUser(to.query.user, to.query.token)
+      localStorage.setItem('user', to.query.user)
+      localStorage.setItem('token', to.query.token)
       return {
         path: '/',
       }
