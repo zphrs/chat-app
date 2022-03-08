@@ -27,6 +27,22 @@ router.beforeEach(async (to, from) => {
       return true
     }
   }
+  if (to.path === '/login') {
+    try {
+      await db.setUser(to.query.user, to.query.token)
+      return {
+        path: '/',
+      }
+    } catch (e) {
+      console.log('error', e)
+      return {
+        path: '/',
+        query: {
+          error: 'Invalid authentication link',
+        },
+      }
+    }
+  }
   if (!user.value && localStorage.getItem('user')) {
     await db.setUser(
       localStorage.getItem('user'),
