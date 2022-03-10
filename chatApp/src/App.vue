@@ -16,7 +16,7 @@ router.beforeEach(async (to, from) => {
   if (user.value) {
     return true
   }
-  if (to.path === '/') {
+  if (to.path === '/' || to.path === '/about') {
     try {
       await db.setUser(
         localStorage.getItem('user'),
